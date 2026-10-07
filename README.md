@@ -78,3 +78,7 @@ Port 5006 uses the same framing and accepts several clients. It always allows `p
 ## Device
 
 Axion XM30F, hardware MTV044.003, software 2.0.100, API 3, serial 775212353.
+
+## License
+
+[PolyForm Noncommercial 1.0.0](LICENSE.md). Personal, research, hobby, educational, and nonprofit use are allowed. Commercial use requires a separate license.
