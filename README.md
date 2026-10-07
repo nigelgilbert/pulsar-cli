@@ -17,6 +17,7 @@ Copy `.env.example` to `.env` and fill in the hotspot name and password. Run `./
 ./pulsar.py set Brightness 12       # change any writable setting from `schema`
 ./pulsar.py get Zoom Brightness     # read named settings
 ./pulsar.py record out.mkv -t 30    # record 30 s, stream copy, no re-encode
+./pulsar.py watch                   # save a clip to clips/ when a warm body comes into view
 ./pulsar.py pipe | ffmpeg -i - ...  # MPEG-TS on stdout
 ./pulsar.py url                     # start the stream and print the RTSP URL
 ./pulsar.py info                    # model, serial, firmware
@@ -25,7 +26,19 @@ Copy `.env.example` to `.env` and fill in the hotspot name and password. Run `./
 ./pulsar.py raw getdeviceinfo       # send any control command
 ```
 
-`play`, `record` and `pipe` reconnect when video stops. A setting change stops video for about 3 seconds.
+`play`, `record`, `watch` and `pipe` reconnect when video stops. A setting change stops video for about 3 seconds.
+
+### Motion clips
+
+`watch` records a clip when something warm comes into view. Use the White Hot palette. Each clip starts 5 seconds before the trigger and stops `--duration` seconds after the warm patch leaves. Raise `--delta` or `--min-area` if it triggers too often.
+
+```sh
+./pulsar.py watch -v                # print median brightness and patch sizes every second
+./pulsar.py watch -t 60 -o ~/clips  # record 60 s after the last detection, save to ~/clips
+./pulsar.py watch --delta 80 --min-area 50  # ignore smaller or cooler patches
+```
+
+`watch` blacks out the REC timer and drops the bottom status bar before detecting. A warm object that stays in view keeps the clip recording. Run one `watch` at a time because two copies compete for the stream.
 
 Control commands go to port 5005 and fall back to 5006 when 5005 is busy. `play` releases its control connection after starting the stream.
 
